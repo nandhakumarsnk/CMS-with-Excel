@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Data</title>
+</head>
+
+<body>
+    <h1>Google Sheets Data</h1>
+    <div id="data"></div>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('http://localhost:3000/api/data');
+                console.log("response", response)
+                if (!response.ok) {
+                    throw new Error(`Error fetching data: ${response.statusText}`);
+                }
+                const data = await response.json();
+                console.log("data", data)
+                displayData(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function displayData(data) {
+            const dataDiv = document.getElementById('data');
+            dataDiv.innerHTML = '';
+
+            const restarauntDetail = data.header[0];
+            const product = data.product;
+            const contact = data.footer[0];
+
+            dataDiv.innerHTML += `<h2>Restaraunt Details</h2>`;
+            dataDiv.innerHTML += `<p>Name: ${restarauntDetail.name}</p>`;
+            dataDiv.innerHTML += `<p>Logo: ${restarauntDetail.logo}</p>`;
+            dataDiv.innerHTML += `<p>BannerImage: ${restarauntDetail.bannerImage}</p>`;
+            dataDiv.innerHTML += `<p>Mission: ${restarauntDetail.description}</p>`;
+
+            dataDiv.innerHTML += `<h2>Products</h2>`;
+            product.forEach((proItem, index) => {
+                dataDiv.innerHTML += `<p>Product ${index + 1}: ${proItem.product}</p>`;
+            });
+
+            dataDiv.innerHTML += `<h2>Contact Details</h2>`;
+            dataDiv.innerHTML += `<p>Location: ${contact.location}</p>`;
+            dataDiv.innerHTML += `<p>Phone: ${contact.phone}</p>`;
+            dataDiv.innerHTML += `<p>Email: ${contact.email}</p>`;
+            dataDiv.innerHTML += `<p>Vission: ${contact.discription}</p>`;
+            dataDiv.innerHTML += `<p>Opening Time: ${contact.openingTime}</p>`;
+            dataDiv.innerHTML += `<p>Facebook: ${contact.facebook}</p>`;
+            dataDiv.innerHTML += `<p>Instagram: ${contact.instagram}</p>`;
+            dataDiv.innerHTML += `<p>Twitter: ${contact.twitter}</p>`;
+        }
+        window.onload = fetchData;
+    </script>
+</body>
+
+</html>
